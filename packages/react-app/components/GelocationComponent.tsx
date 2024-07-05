@@ -8,16 +8,19 @@ interface Position {
 
 const GeolocationComponent: React.FC = () => {
     const [position, setPosition] = useState<Position>({ lat: null, lng: null });
+    const [now, setNow] = useState<Date>(new Date());
     const [error, setError] = useState<string | null>(null);
 
     const getLocation = () => {
         if (navigator.geolocation) {
+            console.log('getting new location');
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     setPosition({
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
                     });
+                    setNow(new Date());
                 },
                 (error) => {
                     setError(error.message);
@@ -30,10 +33,10 @@ const GeolocationComponent: React.FC = () => {
 
     return (
         <div>
-            <button onClick={getLocation}>Get Location</button>
+            <button onClick={getLocation}>Click For Location</button>
             {position.lat !== null && position.lng !== null ? (
                 <p>
-                    Latitude: {position.lat}, Longitude: {position.lng}
+                    Latitude: {position.lat}, Longitude: {position.lng} , at: {now.toISOString()}
                 </p>
             ) : (
                 <p>No position available</p>
